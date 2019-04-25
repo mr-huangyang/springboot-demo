@@ -6,8 +6,11 @@ import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.IRedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
+import org.crazycake.shiro.serializer.ObjectSerializer;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +23,6 @@ import java.util.Map;
  * @author huangyang
  * @Description: shiro 配置类,
  * @date 2019/04/24 下午5:30
- *
  */
 
 @Configuration
@@ -75,9 +77,29 @@ public class ShiroConfig {
     @Bean
     public SessionManager sessionManager(RedisSessionDAO redisSessionDAO) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        //todo 定制
         sessionManager.setSessionDAO(redisSessionDAO);
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        sessionManager.setSessionValidationInterval(1000 * 60 * 60);
+
+        //session 30分钟过期
+        sessionManager.setGlobalSessionTimeout(1000 * 60 * 30);
+        sessionManager.setSessionIdCookieEnabled(true);
+
+        SimpleCookie cookie = new SimpleCookie();
+        cookie.setName("sid");
+        sessionManager.setSessionIdCookie(cookie);
+
         return sessionManager;
+    }
+
+    @Bean
+    public RedisSessionDAO redisSessionDAO(IRedisManager redisManager) {
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setRedisManager(redisManager);
+        redisSessionDAO.setKeyPrefix("app:session:");
+        //设置session 序列化对象
+        redisSessionDAO.setValueSerializer(new ObjectSerializer());
+        return redisSessionDAO;
     }
 
 
@@ -107,6 +129,9 @@ public class ShiroConfig {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
+
+
+
 }
 
 
