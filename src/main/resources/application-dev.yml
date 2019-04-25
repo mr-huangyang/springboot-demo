@@ -14,9 +14,9 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://39.107.91.8:3306/okz?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
-      username: okz
-      password: okz123!@#
+      url: jdbc:mysql://ip:3306/okz?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+      username: xxx
+      password: xxxx
       initial-size: 10
       max-active: 20
       validation-query: select 'X'
@@ -27,9 +27,7 @@ spring:
     password:
     cluster:
       nodes:
-       - 39.107.91.8:8001
-       - 39.107.91.8:8002
-       - 39.107.91.8:8000
+       - ip:port
     lettuce:
       pool:
         max-active: 3
