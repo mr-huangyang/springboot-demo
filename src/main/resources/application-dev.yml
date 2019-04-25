@@ -1,0 +1,40 @@
+
+spring:
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    check-template: true
+    check-template-location: true
+
+  devtools:
+    restart:
+      enabled: true
+
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://host:3306/okz?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+      username: xxx
+      password: xxxx
+      initial-size: 10
+      max-active: 20
+      validation-query: select 'X'
+      test-on-borrow: true
+
+  redis:
+    database: 0
+    password:
+    cluster:
+      nodes:
+       - ip:port
+       - ip:port
+    lettuce:
+      pool:
+        max-active: 3
+        max-idle: 3
+        min-idle: 0
+        max-wait: 5000
+    timeout: 5000
+
+

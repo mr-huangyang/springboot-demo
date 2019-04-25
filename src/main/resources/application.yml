@@ -1,0 +1,27 @@
+
+server:
+  port: ${port:8080}
+
+
+mybatis:
+  config-location:
+  type-aliases-package: com.okz.cip.entity
+  mapper-locations: classpath:mybatis-mapper/*-mapper.xml
+
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+
+mapper:
+  mappers:
+    - tk.mybatis.mapper.common.Mapper
+  notEmpty: true
+
+logging:
+  config: classpath:logback-${spring.profiles.active}.xml
+
+
